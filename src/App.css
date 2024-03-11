@@ -1,0 +1,94 @@
+.container {
+  margin-top: 1rem;
+}
+
+.app-title {
+  margin-bottom: 1rem;
+}
+
+.note-list {
+  display: flex;
+  gap: 1rem;
+  overflow: auto;
+  margin: -1rem;
+  padding: 1rem;
+}
+
+.note-item {
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255 / 0.6);
+  padding: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.note-title {
+  font-size: 1.125rem;
+  font-weight: bold;
+}
+
+.note-edit {
+  margin: 0;
+  border-radius: 50%;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border: initial;
+  background: initial;
+}
+
+.note-delete {
+  margin: 0;
+  border-radius: 50%;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  flex: none;
+  border: initial;
+  background: initial;
+}
+
+.note-editing {
+  /* border: 2px solid lightblue; */
+  outline: 2px solid lightblue;
+}
+
+.empty-notes {
+  padding: 1rem;
+  background: rgba(0, 0, 0 / 0.08);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  background: rgba(0 0 0 / 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0 0 0 / 0.6);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modal-actions > * {
+  flex: 1;
+}
