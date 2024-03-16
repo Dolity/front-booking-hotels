@@ -7,7 +7,8 @@ import passwordIcon from "../assets/padlock.png";
 import { Link, useNavigate } from "react-router-dom";
 
 
-const registerURL = "http://localhost:8000/api/v1/user/register";
+//const registerURL = "http://localhost:8000/api/v1/user/register";
+const registerURL = "https://tame-loincloth-bass.cyclic.app/api/v1/user/register";
 
 function Register() {
     // const [isSubmitted, setIsS] = useState(false);

@@ -30,7 +30,10 @@ export default function ListHotel() {
     });
     const dialogRef = useRef(null);
 
-    const createBooking = "http://localhost:8000/api/v1/user/booking"
+    //const createBooking = "http://localhost:8000/api/v1/user/booking"
+    //const getBookings = "http://localhost:8000/api/v1/user/bookings"
+    const createBooking = "https://tame-loincloth-bass.cyclic.app/api/v1/user/booking"
+    const getBookings = "https://tame-loincloth-bass.cyclic.app/api/v1/user/bookings"
 
     const hotels = [
         { id: 1, name: 'Hotel 1', price: 1500, image: hotelImg1 },
@@ -117,7 +120,7 @@ export default function ListHotel() {
         useEffect(() => {
             async function fetchBookings() {
                 try {
-                    const response = await axios.get("http://localhost:8000/api/v1/user/bookings");
+                    const response = await axios.get(getBookings);
                     console.log(response.data.bookings);
                     const bookings = response.data.bookings.map((booking) => {
                         const startDate = new Date(booking.checkin_date);

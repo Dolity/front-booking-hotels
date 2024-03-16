@@ -6,7 +6,8 @@ import emailIcon from "../assets/mail.png";
 import passwordIcon from "../assets/padlock.png";
 import "./Login.css";
 
-const loginURL = "http://localhost:8000/api/v1/user/login";
+//const loginURL = "http://localhost:8000/api/v1/user/login";
+const loginURL = "https://tame-loincloth-bass.cyclic.app/api/v1/user/login";
 
 function LoginForm() {
   const [isAction, setIsAction] = useState("Login");

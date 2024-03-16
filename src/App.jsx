@@ -5,7 +5,8 @@ import Navbar from './components/Navbar'
 import axios from 'axios';
 import Listhotel from './components/Listhotel';
 
-const authenURL = "http://localhost:8000/api/v1/user/users";
+//const authenURL = "http://localhost:8000/api/v1/user/users";
+const authenURL = "https://tame-loincloth-bass.cyclic.app/api/v1/user/users";
 
 function App() {
 
