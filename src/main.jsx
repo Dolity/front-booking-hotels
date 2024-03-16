@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom'
 import Register from './components/Register.jsx'
 import Login from './components/Login.jsx'
-import Album from './components/Album.jsx'
 import NotFoundPage from './page/notFoundPage.jsx'
 import "./index.css"
 
@@ -26,9 +25,6 @@ const router = createBrowserRouter([
   },
   {   path: '/login',
     element: <Login />
-  },
-  {    path: '/album',
-  element: <Album />
   },
   {
     path: '/*',

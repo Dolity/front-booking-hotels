@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useFormState } from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import emailIcon from "../assets/mail.png";
 import passwordIcon from "../assets/padlock.png";
@@ -9,20 +9,16 @@ import "./Login.css";
 const loginURL = "http://localhost:8000/api/v1/user/login";
 
 function LoginForm() {
-  //React state
   const [isAction, setIsAction] = useState("Login");
 
-  // const [formData, setFormData] = useState({
-  //   email: "",
-  //   password: "",
-  // });
 
   const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [showError, setShowError] = useState(false);
 
-  // const errors = {
-  //   loginError: "Invalid username or password",
-  // }
+  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,36 +28,47 @@ function LoginForm() {
       password
     }
 
-    // const email = formData.email("email")
+    if (loginForm.email === "") {
+      setEmailError('Email is required');
+      return;
+    }
 
-    console.log("Form: ", loginForm);
+    if (loginForm.password === "") {
+      setPasswordError('Password is required');
+      return;
+    }
+
+    if (loginForm.password.length < 6)  {
+      setPasswordError('Password > 6');
+      return;
+    }
 
     try {
-      axios
-        .post(loginURL, {
-          email: loginForm.email,
-          password: loginForm.password
-        })
-        .then((response) => {
-          console.log(response);
+      const response = await axios.post(loginURL, {
+        email: loginForm.email,
+        password: loginForm.password
+      });
 
-          if (response.data.status === 200) {
-            // setIsError(true);
-            console.log("Login Success");
-            localStorage.setItem("token", response.data.token);
-            window.location.href = "/book";
-          } else {
-            // setIsError({ name: "pass", message: errors.loginError })
-            console.log("Login Failed");
-          }
-        });
+      console.log(response);
+
+      if (response.data.status === 200) {
+        console.log("Login Success");
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("id", response.data.id);
+        navigate("/book");
+      } else {
+        console.log("Login Failed");
+        alert("รหัสผิด กรุณาลองใหม่อีกครั้ง");
+      } 
     } catch (error) {
+      if (error.response.status === 400) {
+        console.log("Login Failed");
+        setShowError(true);
+      }
       console.log(error);
+      setShowError(true);
     }
   };
-
-
-  // const [message, formAction] = useFormState(LoginForm, null);
 
   const renderForm = (
     <form onSubmit={handleSubmit}>
@@ -72,23 +79,30 @@ function LoginForm() {
         </div>
 
         <div className="inputs">
-          {/* {isAction === "Login" ? <div></div> : */}
           <div className="input">
             <img src={emailIcon} alt="" style={{ width: "75px" }} />
             <input required type="email" placeholder="Email" id="email" value={email} onChange={() => {
               setEmail(event.target.value)
+              setEmailError('');
             }} />
+              {emailError && 
+                <p className="text-red-500 mr-10 whitespace-nowrap animate-bounce">
+                  {emailError}
+                </p>}
+            
           </div>
-          {/* } */}
 
           <div className="input">
             <img src={passwordIcon} alt="" style={{ width: "75px" }} />
             <input required type="password" placeholder="Password" id="password" value={password} onChange={() => {
               setPassword(event.target.value)
+              setPasswordError('');
             }} />
+              {passwordError && 
+                <p className="text-red-500 mr-10 whitespace-nowrap animate-bounce">
+                  {passwordError}
+                </p>}
           </div>
-
-
 
           {isAction === "Sign Up" ? <div></div> :
             <div className="forgot-password">
@@ -109,7 +123,21 @@ function LoginForm() {
           </div>
         </div>
       </div>
+      {showError && (
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded shadow-lg text-center">
+              <p className="text-red-500 text-lg">Email or Password not match</p>
+              <button
+                onClick={() => setShowError(false)}
+                className="mt-4 px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
     </form>
+    
   );
 
   return (
@@ -119,129 +147,3 @@ function LoginForm() {
   )
 }
 export default LoginForm;
-
-// TODO remove, this demo shouldn't need to reset the theme.
-
-// const defaultTheme = createTheme();
-
-// export default function SignInSide() {
-
-//   return (
-//     <ThemeProvider theme={defaultTheme}>
-//       <Stack alignItems="center" justifyContent="center" sx={{ height: "100vh", margin: "auto" }}>
-//         <Card
-//           sx={{
-//             p: 0,
-//             width: "100%",
-//             maxWidth: 1200,
-//             borderRadius: 8,
-//             boxShadow: 24,
-//           }}
-//         >
-//           <Grid container component="main" sx={{ height: "80vh" }}>
-//             <CssBaseline />
-//             <Grid
-//               item
-//               xs={false}
-//               sm={4}
-//               md={7}
-//               sx={{
-//                 backgroundImage:
-//                   "url(https://source.unsplash.com/random?wallpapers)",
-//                 backgroundRepeat: "no-repeat",
-//                 backgroundColor: (t) =>
-//                   t.palette.mode === "light"
-//                     ? t.palette.grey[50]
-//                     : t.palette.grey[900],
-//                 backgroundSize: "cover",
-//                 backgroundPosition: "center",
-//               }}
-//             />
-//             <Grid
-//               item
-//               xs={12}
-//               sm={8}
-//               md={5}
-//               component={Paper}
-//               elevation={6}
-//               square
-//               sx={{
-//                 display: "flex",
-//                 flexDirection: "column",
-//                 alignItems: "center",
-//               }}
-//             >
-//               <Box
-//                 sx={{
-//                   my: 8,
-//                   mx: 4,
-//                   display: "flex",
-//                   flexDirection: "column",
-//                   alignItems: "center",
-//                 }}
-//               >
-//                 <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-//                   <LockOutlinedIcon />
-//                 </Avatar>
-//                 <Typography component="h1" variant="h4" color={"black"}>
-//                   Sign in
-//                 </Typography>
-//                 <Box
-//                   component="form"
-//                   noValidate
-//                   onSubmit={handleSubmit}
-//                   sx={{ mt: 1 }}
-//                 >
-//                   <TextField
-//                     margin="normal"
-//                     required
-//                     fullWidth
-//                     id="email"
-//                     label="Email Address"
-//                     name="email"
-//                     autoComplete="email"
-//                   />
-//                   <TextField
-//                     margin="normal"
-//                     required
-//                     fullWidth
-//                     name="password"
-//                     label="Password"
-//                     type="password"
-//                     id="password"
-//                     autoComplete="current-password"
-//                   />
-//                   <FormControlLabel
-//                     control={<Checkbox value="remember" color="primary" />}
-//                     label="Remember me"
-//                   />
-//                   <Button
-//                     type="submit"
-//                     fullWidth
-//                     variant="contained"
-//                     sx={{ mt: 3, mb: 2 }}
-//                   >
-//                     Sign In
-//                   </Button>
-//                   <Grid container>
-//                     <Grid item xs>
-//                       <Link href="#" variant="body2">
-//                         Forgot password?
-//                       </Link>
-//                     </Grid>
-//                     <Grid item>
-//                       <Link href="#" variant="body2">
-//                         {"Don't have an account? Sign Up"}
-//                       </Link>
-//                     </Grid>
-//                   </Grid>
-//                   <Copyright sx={{ mt: 5 }} />
-//                 </Box>
-//               </Box>
-//             </Grid>
-//           </Grid>
-//         </Card>
-//       </Stack>
-//     </ThemeProvider>
-//   );
-// }

@@ -4,7 +4,7 @@ import "./Register.css";
 
 import emailIcon from "../assets/mail.png";
 import passwordIcon from "../assets/padlock.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const registerURL = "http://localhost:8000/api/v1/user/register";
@@ -19,6 +19,9 @@ function Register() {
     const [password, setPassword] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [repassword, setRepassword] = useState('');
+    const [repasswordError, setRepasswordError] = useState('');
+
+    const navigate = useNavigate();
 
     // const errors = {
     //     loginError: "Invalid username or password",
@@ -41,9 +44,15 @@ function Register() {
             return;
         }
 
-        if (registerForm.password === "" || registerForm.password !== repassword) {
+        if (registerForm.password === "") {
             setPasswordError('Password is required');
-            console.log("Password not match");
+            setRepasswordError('Re-Password is required');
+            return;
+        }
+
+        if (registerForm.password !== repassword) {
+            setPasswordError('Password is not match');
+            setRepasswordError('Password is not match');
             return;
         }
 
@@ -58,7 +67,7 @@ function Register() {
             if (response.data.status === 201) {
                 console.log("Register Success");
                 localStorage.setItem("token", response.data.token);
-                window.location.href = "/login";
+                navigate("/login")
             } else {
                 console.log("Register Failed");
             }
@@ -66,14 +75,6 @@ function Register() {
             console.log(error);
         }
     };
-
-
-
-    // Generate JSX code for error message
-    // const renderErrorMessage = (name) =>
-    //   name === errorMessages.name && (
-    //     <div className="error">{errorMessages.message}</div>
-    //   );
 
     const renderForm = (
         <form onSubmit={handleSubmit}>
@@ -89,8 +90,12 @@ function Register() {
                             <img src={emailIcon} alt="" style={{ width: "75px" }} />
                             <input type="email" placeholder="Email" required value={email} onChange={() => {
                                 setEmail(event.target.value)
+                                setEmailError('');
                             }} />
-                            {emailError && <p style={{ color: 'red' }}>{emailError}</p>}
+                            {emailError && 
+                                <p className="text-red-500 mr-10 whitespace-nowrap animate-bounce">
+                                    {emailError}
+                                </p>}
                         </div>
                     }
 
@@ -98,15 +103,18 @@ function Register() {
                         <img src={passwordIcon} alt="" style={{ width: "75px" }} />
                         <input type="password" placeholder="Password" required value={password} onChange={() => {
                             setPassword(event.target.value)
+                            setPasswordError('');
                         }} />
-                        {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
+                        {passwordError && <p className="text-red-500 mr-10 whitespace-nowrap animate-bounce">{passwordError}</p>}
                     </div>
 
                     <div className="input">
                         <img src={passwordIcon} alt="" style={{ width: "75px" }} />
                         <input type="password" placeholder="Re-Password" required value={repassword} onChange={() => {
                             setRepassword(event.target.value)
+                            setRepasswordError('')
                         }} />
+                        {repasswordError && <p className="text-red-500 mr-10 whitespace-nowrap animate-bounce">{repasswordError}</p>}
                     </div>
 
                     {isAction === "Sign Up" ? <div></div> :

@@ -1,18 +1,17 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Background from './components/Background'
 import Navbar from './components/Navbar'
-import Search from './components/Search'
 import axios from 'axios';
+import Listhotel from './components/Listhotel';
 
 const authenURL = "http://localhost:8000/api/v1/user/users";
 
 function App() {
 
-  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
 
-  
 useEffect(() => {
-
   try {
     const token = localStorage.getItem("token");
     axios.get(authenURL, {
@@ -26,10 +25,9 @@ useEffect(() => {
 
         if (response.data.status === 200) {
           console.log("Authentication Success");
-          setUsers(response.data.users)
         } else {
           console.log("Authentication Failed");
-          window.location.href = "/login"
+          navigate("/login")
         }
       })
 
@@ -37,14 +35,14 @@ useEffect(() => {
     console.log(error);
   }
 
-}, [])
+}, [navigate])
 
   return (
     <>
       <div>
         <Navbar />
        <Background /> 
-       {/* <Search /> */}
+       <Listhotel />
 
       </div>
     </>
